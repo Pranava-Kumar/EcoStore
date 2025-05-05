@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Products - EcoShop{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-color: #1abc9c;
+        --primary-dark: #16a085;
+        --secondary-color: #f39c12;
+        --danger-color: #e74c3c;
+        --text-color: #2c3e50;
+        --secondary-text: #7f8c8d;
+        --background-light: #f8f9fa;
+        --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        --input-border-color: #ddd;
+    }
+
+    /* Page Title */
+    h2.my-4 {
+        color: var(--text-color);
+        text-align: center;
+        font-weight: bold;
+        border-bottom: 3px solid var(--primary-color);
+        display: inline-block;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Upload Card */
+    .upload-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+    }
+
+    .upload-card h5 {
+        font-size: 1.5rem;
+        color: var(--text-color);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Form Field Styles */
+    .upload-card .form-label {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .upload-card .form-control {
+        border-radius: 8px;
+        border: 1px solid var(--input-border-color);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .upload-card .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+    }
+
+    .upload-card .row .col-md-4,
+    .upload-card .row .col-md-3 {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Submit Button */
+    .upload-card .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .upload-card .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    /* Product Grid */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 1rem;
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+    }
+
+    .product-card img:hover {
+        transform: scale(1.05);
+    }
+
+    .product-card .card-body {
+        padding: 1rem;
+    }
+
+    .product-card .card-title {
+        font-size: 1.25rem;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .product-card .card-text {
+        font-size: 1rem;
+        color: var(--secondary-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .product-card .btn-warning,
+    .product-card .btn-danger {
+        margin-top: 1rem;
+    }
+
+    .btn-warning {
+        background-color: var(--secondary-color);
+        border: none;
+    }
+
+    .btn-warning:hover {
+        background-color: #d68910;
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 767px) {
+        .upload-card .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .product-card .card-body {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <h2 class="my-4">Available Products</h2>
+
+    <!-- Upload New Product -->
+    <div class="upload-card">
+        <h5>Upload a New Product</h5>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="name" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Product Name" required>
+                </div>
+                <div class="col-md-2">
+                    <label for="price" class="form-label">Price (₹)</label>
+                    <input type="number" class="form-control" id="price" name="price" placeholder="Price" step="0.01" required>
+                </div>
+                <div class="col-md-2">
+                    <label for="quantity" class="form-label">Quantity (pieces)</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="weight" class="form-label">Weight per Piece (kg)</label>
+                    <input type="number" class="form-control" id="weight" name="weight" placeholder="Weight per Piece" step="0.01" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="place" class="form-label">Place</label>
+                    <input type="text" class="form-control" id="place" name="place" placeholder="Place" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="file" class="form-label">Product Image</label>
+                    <input type="file" class="form-control" id="file" name="file" accept="image/*" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="description" class="form-label">Product Description</label>
+                    <textarea class="form-control" id="description" name="description" placeholder="Product Description" rows="4" required></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload Product</button>
+        </form>
+    </div>
+
+    <!-- Product Listings -->
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ product.image or 'https://via.placeholder.com/300x200' }}" alt="{{ product.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">Price: ₹{{ "%.2f"|format(product.price) }}</p>
+                <p class="card-text">Location: {{ product.place }}</p>
+                <p class="card-text">Category: {{ product.category }}</p>
+                <p class="card-text">Owner: {{ product.owner_name }}</p>
+                <p class="card-text">
+                    <strong>Contact:</strong> 
+                    <a href="mailto:{{ product.owner_email }}">{{ product.owner_email }}</a>
+                </p>
+                <p class="card-text">Quantity: {{ product.quantity }} pieces</p>
+                <p class="card-text">Weight per Piece: {{ product.weight }} kg</p>
+                <p class="card-text"><strong>Description:</strong> {{ product.description }}</p>
+                {% if product.owner_id == session.get('user_id') %}
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('edit_product', product_id=product['_id']) }}" class="btn btn-warning">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_product', product_id=product['_id']) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
